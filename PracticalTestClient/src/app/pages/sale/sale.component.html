@@ -1,0 +1,123 @@
+<div class="container">
+    <div class=" card border-primary mt-5">
+        <div class="card-header text-center">
+            <h4 class="text-primary"><strong>Sale</strong></h4>
+        </div>
+        <div class="card-body">
+
+            <form [formGroup]="saleForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
+                <!-- Sale Date -->
+                <div class="mb-3">
+                    <label for="saleDate" class="form-label">Sale Date</label>
+                    <input id="saleDate" bsDatepicker
+                    [bsConfig]="{ isAnimated: true }" type="text" class="form-control" formControlName="saleDate" required />
+                    <div *ngIf="saleForm.get('saleDate')?.invalid && saleForm.get('saleDate')?.touched"
+                        class="text-danger">
+                        Sale Date is required.
+                    </div>
+                </div>
+
+                <!-- Customer Details -->
+                <div class="card mb-3">
+                    <div formGroupName="customer" class=" card-body row g-3">
+                        <h5>Customer Details</h5>
+
+                        <div class="col-md-6">
+                            <label for="name" class="form-label">Customer Name</label>
+                            <input id="name" type="text" class="form-control" formControlName="name" required />
+                            <div *ngIf="saleForm.get('customer.name')?.invalid && saleForm.get('customer.name')?.touched"
+                                class="text-danger">
+                                Name is required and must be at least 3 characters.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">Email</label>
+                            <input id="email" type="email" class="form-control" formControlName="email" required />
+                            <div *ngIf="saleForm.get('customer.email')?.invalid && saleForm.get('customer.email')?.touched"
+                                class="text-danger">
+                                Enter a valid email.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="phone" class="form-label">Phone</label>
+                            <input id="phone" type="text" class="form-control" formControlName="phone" required />
+                            <div *ngIf="saleForm.get('customer.phone')?.invalid && saleForm.get('customer.phone')?.touched"
+                                class="text-danger">
+                                Enter 11 digit phone number.
+                            </div>
+                           
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="address" class="form-label">Address</label>
+                            <textarea id="address" type="text" class="form-control" rows="1" formControlName="address" required ></textarea>
+                            <div *ngIf="saleForm.get('customer.address')?.invalid && saleForm.get('customer.address')?.touched"
+                                class="text-danger">
+                                Address is required.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Sale Items -->
+                <div class="card">
+                    <div class="card-body p-3 mb-3">
+                        <h5>Sale Items</h5>
+
+                        <div formArrayName="items">
+                            <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i"
+                                class="row g-3 mb-3">
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Product</label>
+                                    <select id="productId" formControlName="productId" class="form-select"(change)="onDropdownChange($event, i)" required>
+                                        <option value="" disabled>Select product</option>
+                                        <option *ngFor="let product of productData" [value]="product.id">{{ product.name }}
+                                        </option>
+                                    </select>
+                                    <div *ngIf="item.get('productId')?.invalid && item.get('productId')?.touched"
+                                        class="text-danger">
+                                        Product is required.
+                                    </div>
+                                </div>
+                            
+
+                            <div class="col-md-4">
+                                <label class="form-label">Quantity</label>
+                                <input type="number" class="form-control" (change)="onChange($event,i)" formControlName="quantity" required />
+                                <div *ngIf="item.get('quantity')?.invalid && item.get('quantity')?.touched"
+                                    class="text-danger">
+                                    Quantity must be greater than 0.
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label">Total Price</label>
+                                <input type="number" class="form-control" formControlName="totalPrice" [readOnly]="true" required />
+                            </div>
+
+                            <div class="col-md-1 ">
+                                <button type="button" class="btn btn-danger btn-sm removeBtn"
+                                    (click)="removeItem(i)">Remove</button>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-primary" (click)="addItem()">Add Item</button>
+                    </div>
+
+
+                </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="d-flex justify-content-end">
+              <button class="btn btn-info mt-2" routerLink="/salelist"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button> &nbsp;
+              <button type="submit" class="btn btn-success mt-2" [disabled]="saleForm.invalid"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button>
+            </div>
+        </div>
+       
+        </form>
+    </div>
+</div>
+</div>
